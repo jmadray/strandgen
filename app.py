@@ -92,18 +92,84 @@ def generate_puzzle():
         grid = grid_lines
         grid_size = len(grid) if grid else 15
         
-        # Extract successfully placed words from the output string
-        placed_words = []
-        successfully_placed = word_list  # Assume all words were placed for now
-        
-        # Look for answer key in the string
+        # Extract answer key from the puzzle
         answer_key_info = []
-        for line in lines:
-            if 'Answer Key:' in line:
-                # Extract answer information (simplified for now)
-                break
+        placed_words = []
+        successfully_placed = word_list  # Start with all words
         
-        skipped_words = []  # Assume no words skipped for now
+        try:
+            # Try to get answer key from puzzle object
+            if hasattr(puzzle, 'key'):
+                answer_key_raw = puzzle.key
+                print(f'🔍 DEBUG - Answer key type: {type(answer_key_raw)}')
+                print(f'🔍 DEBUG - Answer key content: {answer_key_raw}')
+                
+                if isinstance(answer_key_raw, list):
+                    # It's already a list of answer objects
+                    for answer in answer_key_raw:
+                        if isinstance(answer, dict):
+                            answer_key_info.append(answer)
+                        else:
+                            print(f'🔍 DEBUG - Unexpected answer format: {answer}')
+                elif isinstance(answer_key_raw, dict):
+                    # It's a single answer object
+                    answer_key_info.append(answer_key_raw)
+                else:
+                    print(f'🔍 DEBUG - Unexpected answer key format: {type(answer_key_raw)}')
+            else:
+                print('🔍 DEBUG - Puzzle has no key attribute')
+                
+            # Alternative: try to parse from string representation
+            if not answer_key_info:
+                print('🔍 DEBUG - Trying to extract from string representation')
+                puzzle_str_lines = str(puzzle).split('\n')
+                
+                # Look for answer key in puzzle string
+                answer_section = False
+                for line in puzzle_str_lines:
+                    if 'Answer Key:' in line:
+                        answer_section = True
+                        # Extract answer key line
+                        answer_text = line.split('Answer Key:', 1)[-1].strip()
+                        
+                        # Parse individual answers (format: "WORD DIR @ (x, y)")
+                        if answer_text:
+                            answers = answer_text.split(', ')
+                            for answer in answers:
+                                try:
+                                    # Parse format like "CAT NE @ (5, 14)"
+                                    parts = answer.strip().split(' @ ')
+                                    if len(parts) == 2:
+                                        word_dir = parts[0].strip()
+                                        coords_str = parts[1].strip()
+                                        
+                                        # Split word and direction
+                                        word_dir_parts = word_dir.split()
+                                        if len(word_dir_parts) >= 2:
+                                            word = word_dir_parts[0]
+                                            direction = word_dir_parts[1]
+                                            
+                                            # Parse coordinates (x, y)
+                                            coords_clean = coords_str.strip('()')
+                                            coord_parts = coords_clean.split(',')
+                                            if len(coord_parts) == 2:
+                                                x = int(coord_parts[0].strip())
+                                                y = int(coord_parts[1].strip())
+                                                
+                                                answer_key_info.append({
+                                                    'word': word,
+                                                    'direction': direction,
+                                                    'start_coordinates': [x, y]
+                                                })
+                                except (ValueError, IndexError) as parse_error:
+                                    print(f'🔍 DEBUG - Failed to parse answer: {answer}, error: {parse_error}')
+                                    continue
+                        break
+                        
+        except Exception as key_error:
+            print(f'❌ Answer key extraction error: {key_error}')
+            
+        skipped_words = []  # Most words should be placed with professional library
         
         return jsonify({
             'grid': grid,
