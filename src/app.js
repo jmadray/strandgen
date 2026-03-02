@@ -18,7 +18,11 @@ app.get('/', (req, res) => {
 app.post('/generate', (req, res) => {
     const { words } = req.body;
     
+    console.log('🔍 DEBUG - Raw request body:', JSON.stringify(req.body));
+    console.log('🔍 DEBUG - Words received:', JSON.stringify(words));
+    
     if (!words || !words.trim()) {
+        console.log('❌ DEBUG - No words provided');
         return res.status(400).json({ error: 'Please provide a list of words' });
     }
     
@@ -27,7 +31,10 @@ app.post('/generate', (req, res) => {
         .map(word => word.trim())
         .filter(word => word.length > 0);
     
+    console.log('🔍 DEBUG - Parsed word list:', JSON.stringify(wordList));
+    
     if (wordList.length < 3) {
+        console.log('❌ DEBUG - Not enough words:', wordList.length);
         return res.status(400).json({ error: 'Please provide at least 3 words' });
     }
     
