@@ -303,26 +303,24 @@ footer {
         color: black !important;
     }
     
-    /* Main puzzle layout - side by side */
+    /* Main puzzle layout - vertical stack to fit one page */
     .puzzle-container {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: flex-start !important;
-        gap: 15px !important;
+        display: block !important;
         width: 100% !important;
         page-break-inside: avoid !important;
     }
     
-    /* Grid side (left) */
+    /* Grid on top */
     .grid-container {
-        flex: 0 0 65% !important;
-        width: 65% !important;
+        width: 100% !important;
+        margin-bottom: 10px !important;
+        text-align: center !important;
     }
     
     .grid-container h3 {
         text-align: center !important;
-        margin: 0 0 8px 0 !important;
-        font-size: 14px !important;
+        margin: 0 0 5px 0 !important;
+        font-size: 12px !important;
         color: black !important;
         font-weight: bold !important;
     }
@@ -331,42 +329,44 @@ footer {
         display: grid !important;
         background: white !important;
         border: 2px solid black !important;
-        padding: 3px !important;
+        padding: 2px !important;
         border-radius: 0 !important;
-        margin: 0 !important;
-        width: 100% !important;
+        margin: 0 auto !important;
+        width: 450px !important;
+        max-width: 450px !important;
     }
     
     .grid-cell {
         border: 1px solid black !important;
         background: white !important;
         color: black !important;
-        font-size: 8px !important;
+        font-size: 7px !important;
         font-weight: bold !important;
         border-radius: 0 !important;
-        width: 15px !important;
-        height: 15px !important;
+        width: 12px !important;
+        height: 12px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         text-align: center !important;
+        line-height: 1 !important;
     }
     
-    /* Word list side (right) */
+    /* Word list below grid */
     .words-container {
-        flex: 0 0 30% !important;
-        width: 30% !important;
+        width: 100% !important;
+        margin-top: 10px !important;
     }
     
     .words-container h3 {
         text-align: center !important;
-        margin: 0 0 8px 0 !important;
-        font-size: 14px !important;
+        margin: 0 0 5px 0 !important;
+        font-size: 12px !important;
         color: black !important;
         font-weight: bold !important;
     }
     
-    /* Fix the scrollable word list issue */
+    /* Fix the scrollable word list - make it a simple grid */
     #word-list {
         background: white !important;
         border: 2px solid black !important;
@@ -378,19 +378,25 @@ footer {
         overflow-y: visible !important;
         list-style: none !important;
         width: 100% !important;
-        display: block !important;
+        display: grid !important;
+        grid-template-columns: repeat(6, 1fr) !important;
+        gap: 4px !important;
+        margin: 0 auto !important;
+        max-width: 450px !important;
     }
     
     #word-list li {
-        font-size: 8px !important;
-        padding: 2px 0 !important;
-        border-bottom: none !important;
+        font-size: 7px !important;
+        padding: 2px !important;
+        border: 1px solid #ccc !important;
         color: black !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.5px !important;
-        margin-bottom: 2px !important;
+        letter-spacing: 0.3px !important;
+        margin: 0 !important;
         display: block !important;
+        text-align: center !important;
         break-inside: avoid !important;
+        background: #f8f8f8 !important;
     }
     
     /* Page setup */
