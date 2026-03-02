@@ -132,11 +132,12 @@ header p {
 /* Grid Styles */
 .grid {
     display: grid;
-    gap: 1px;
+    gap: 0;
     max-width: 600px;
     margin: 0 auto;
-    background: #34495e;
+    background: white;
     padding: 10px;
+    border: 2px solid #34495e;
     border-radius: 8px;
     /* Grid dimensions set by JavaScript */
 }
@@ -147,11 +148,21 @@ header p {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
     color: #2c3e50;
-    border-radius: 2px;
-    min-height: 25px;
+    min-height: 30px;
+    border-right: 1px solid #ecf0f1;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+/* Clean up the right and bottom edges */
+.grid-cell:nth-child(15n) {
+    border-right: none;
+}
+
+.grid-cell:nth-last-child(-n+15) {
+    border-bottom: none;
 }
 
 /* Word List */
@@ -329,27 +340,39 @@ footer {
         display: grid !important;
         background: white !important;
         border: 2px solid black !important;
-        padding: 2px !important;
+        padding: 5px !important;
         border-radius: 0 !important;
         margin: 0 auto !important;
         width: 450px !important;
         max-width: 450px !important;
+        gap: 0 !important;
     }
     
     .grid-cell {
-        border: 1px solid black !important;
+        border: none !important;
         background: white !important;
         color: black !important;
-        font-size: 7px !important;
+        font-size: 10px !important;
         font-weight: bold !important;
         border-radius: 0 !important;
-        width: 12px !important;
-        height: 12px !important;
+        width: 20px !important;
+        height: 20px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         text-align: center !important;
         line-height: 1 !important;
+        border-right: 1px solid #ddd !important;
+        border-bottom: 1px solid #ddd !important;
+    }
+    
+    /* Clean up grid borders */
+    .grid-cell:nth-child(15n) {
+        border-right: none !important;
+    }
+    
+    .grid-cell:nth-last-child(-n+15) {
+        border-bottom: none !important;
     }
     
     /* Word list below grid */
@@ -369,7 +392,7 @@ footer {
     /* Fix the scrollable word list - make it a simple grid */
     #word-list {
         background: white !important;
-        border: 2px solid black !important;
+        border: 1px solid black !important;
         border-radius: 0 !important;
         padding: 8px !important;
         max-height: none !important;
@@ -379,24 +402,25 @@ footer {
         list-style: none !important;
         width: 100% !important;
         display: grid !important;
-        grid-template-columns: repeat(6, 1fr) !important;
-        gap: 4px !important;
+        grid-template-columns: repeat(5, 1fr) !important;
+        gap: 2px !important;
         margin: 0 auto !important;
         max-width: 450px !important;
     }
     
     #word-list li {
-        font-size: 7px !important;
-        padding: 2px !important;
-        border: 1px solid #ccc !important;
+        font-size: 8px !important;
+        padding: 3px 2px !important;
+        border: none !important;
         color: black !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.3px !important;
+        letter-spacing: 0.5px !important;
         margin: 0 !important;
         display: block !important;
-        text-align: center !important;
+        text-align: left !important;
         break-inside: avoid !important;
-        background: #f8f8f8 !important;
+        background: white !important;
+        border-bottom: 1px dotted #ccc !important;
     }
     
     /* Page setup */
