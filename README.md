@@ -1,32 +1,39 @@
 # Strandgen - Bathroom Word Search Generator 🚽
 
-A web application that generates printable word search puzzles. Perfect for bathroom reading when you forget your phone!
+A web application that generates printable word search puzzles using professional-grade algorithms. Perfect for bathroom reading when you forget your phone!
 
 ## Features
 
-- **Input**: Paste a list of themed words
-- **Grid**: 15x15 word search format  
+- **Professional Algorithm**: Uses `word-search-generator` Python library
+- **Input**: Paste a list of themed words (multi-word entries supported)
+- **Dynamic Grid Size**: Automatically sizes grid based on word lengths  
 - **8 Directions**: Words hidden horizontally, vertically, and diagonally
-- **Overlapping**: Words can share letters for more challenging puzzles
-- **Output**: Printable puzzle with word list for hints
+- **Difficulty Levels**: Professional puzzle generation with optimal placement
+- **Answer Keys**: Complete solution coordinates included
+- **Smart Overlapping**: Words intelligently share letters
+- **Output**: Clean printable puzzle with word list
 - **Theme**: Perfect for bathroom-themed words (or any theme!)
 
 ## How It Works
 
-1. Enter your themed words (one per line)
-2. Generator creates a 15x15 grid with words hidden in 8 directions
-3. Words can overlap and share letters
-4. Print and enjoy your custom word search!
+1. Enter your themed words (one per line, spaces automatically removed)
+2. Professional algorithm creates optimally-sized grid 
+3. Words placed in all 8 directions with intelligent overlap
+4. Print and enjoy your high-quality word search!
+
+## Technology
+
+- **Backend**: Python + Flask + word-search-generator library
+- **Frontend**: Vanilla HTML/CSS/JavaScript  
+- **Deployment**: Docker + Traefik on jamlife.solutions
 
 ## Development
-
-Built with Node.js and follows secure development practices.
 
 ### Setup
 
 ```bash
-npm install
-npm run dev
+pip install -r requirements.txt
+python app.py
 ```
 
 ### Deploy

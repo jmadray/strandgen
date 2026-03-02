@@ -130,7 +130,6 @@ scp Dockerfile ratchet@100.67.147.121:/opt/strandgen/
 echo "  Building and starting containers..."
 ssh ratchet@100.67.147.121 "
     cd /opt/strandgen &&
-    npm install &&
     docker compose down || true &&
     docker compose up -d --build
 "
