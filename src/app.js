@@ -147,7 +147,8 @@ function findWordPlacement(grid, word) {
 function canPlaceHorizontally(grid, word, row, col) {
     for (let i = 0; i < word.length; i++) {
         const currentCell = grid[row][col + i];
-        if (currentCell !== '' && currentCell !== word[i].toUpperCase()) {
+        // Allow placement in empty cells only for now (simpler algorithm)
+        if (currentCell !== '') {
             return false;
         }
     }
@@ -157,7 +158,8 @@ function canPlaceHorizontally(grid, word, row, col) {
 function canPlaceVertically(grid, word, row, col) {
     for (let i = 0; i < word.length; i++) {
         const currentCell = grid[row + i][col];
-        if (currentCell !== '' && currentCell !== word[i].toUpperCase()) {
+        // Allow placement in empty cells only for now (simpler algorithm)
+        if (currentCell !== '') {
             return false;
         }
     }
