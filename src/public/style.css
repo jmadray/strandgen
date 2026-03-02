@@ -1,441 +1,539 @@
-/* Global Styles */
+/* Reset and Base Styles */
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-    font-family: 'Georgia', serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f8fafc;
+    color: #1e293b;
     line-height: 1.6;
-    color: #333;
-    background-color: #f8f9fa;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+/* App Container */
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Header */
-header {
-    text-align: center;
-    margin-bottom: 40px;
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-header h1 {
-    font-size: 2.5em;
-    color: #2c3e50;
-    margin-bottom: 10px;
-}
-
-header p {
-    font-size: 1.2em;
-    color: #666;
-}
-
-/* Input Section */
-.input-section {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-.input-section h2 {
-    margin-bottom: 20px;
-    color: #2c3e50;
-}
-
-#wordInput {
-    width: 100%;
-    max-width: 500px;
-    padding: 15px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    font-family: monospace;
-    resize: vertical;
-    margin-bottom: 20px;
-}
-
-#wordInput:focus {
-    outline: none;
-    border-color: #3498db;
-}
-
-#generateBtn {
-    background: #3498db;
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    border: none;
-    padding: 15px 30px;
-    font-size: 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s ease;
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-#generateBtn:hover {
-    background: #2980b9;
-}
-
-#generateBtn:disabled {
-    background: #bdc3c7;
-    cursor: not-allowed;
-}
-
-/* Output Section */
-.output-section {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.puzzle-info {
-    margin-bottom: 30px;
-    padding: 20px;
-    background: #ecf0f1;
-    border-radius: 8px;
-}
-
-.puzzle-info p {
-    margin-bottom: 10px;
-    font-size: 1.1em;
-}
-
-.puzzle-container {
-    display: flex;
-    gap: 40px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-}
-
-.grid-container, .words-container {
-    flex: 1;
-    min-width: 300px;
-}
-
-.grid-container h3, .words-container h3 {
-    margin-bottom: 20px;
-    color: #2c3e50;
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
     text-align: center;
 }
 
-/* Grid Styles */
-.grid {
+.logo {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.logo i {
+    font-size: 1.8rem;
+}
+
+.tagline {
+    opacity: 0.9;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
     display: grid;
-    gap: 0;
-    max-width: 600px;
+    grid-template-columns: 350px 1fr;
+    gap: 2rem;
+    max-width: 1400px;
     margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Controls Panel */
+.controls-panel {
     background: white;
-    padding: 10px;
-    border: 2px solid #34495e;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+}
+
+.control-section {
+    margin-bottom: 2rem;
+}
+
+.control-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.section-title i {
+    font-size: 0.9rem;
+    color: #6366f1;
+}
+
+/* Form Elements */
+.word-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e5e7eb;
     border-radius: 8px;
-    /* Grid dimensions set by JavaScript */
+    font-size: 0.9rem;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fafafa;
+}
+
+.word-input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    background: white;
+}
+
+.word-count {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #6b7280;
+    text-align: right;
+}
+
+.setting-group {
+    margin-bottom: 1rem;
+}
+
+.setting-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.4rem;
+}
+
+.setting-select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.setting-select:focus {
+    outline: none;
+    border-color: #6366f1;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    justify-content: center;
+    text-align: center;
+}
+
+.btn-large {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.btn-medium {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.btn-small {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    width: 100%;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+}
+
+.btn-secondary {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.btn-success:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+}
+
+.btn-outline {
+    background: transparent;
+    color: #475569;
+    border: 1px solid #d1d5db;
+}
+
+.btn-outline:hover {
+    background: #f8fafc;
+    border-color: #9ca3af;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Checkbox */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #374151;
+    margin: 1rem 0;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: #6366f1;
+}
+
+/* Preview Panel */
+.preview-panel {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 600px;
+}
+
+/* States */
+.loading-state,
+.empty-state,
+.error-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    text-align: center;
+}
+
+.loading-state .spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 3px solid #e5e7eb;
+    border-top: 3px solid #6366f1;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.empty-state .empty-icon,
+.error-state .error-icon {
+    font-size: 3rem;
+    color: #9ca3af;
+    margin-bottom: 1rem;
+}
+
+.error-state .error-icon {
+    color: #ef4444;
+}
+
+.empty-state h3,
+.error-state h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p,
+.error-state p {
+    color: #6b7280;
+    max-width: 300px;
+}
+
+/* Puzzle Preview */
+.puzzle-preview {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.puzzle-header {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.puzzle-info h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+}
+
+.puzzle-meta {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.puzzle-content {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+/* Grid */
+.puzzle-grid-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.puzzle-grid {
+    display: inline-grid;
+    gap: 1px;
+    background: #d1d5db;
+    border: 2px solid #9ca3af;
+    border-radius: 4px;
+    padding: 4px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
 .grid-cell {
-    aspect-ratio: 1;
+    width: 28px;
+    height: 28px;
     background: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    font-weight: bold;
-    color: #2c3e50;
-    min-height: 30px;
-    border-right: 1px solid #ecf0f1;
-    border-bottom: 1px solid #ecf0f1;
-}
-
-/* Clean up the right and bottom edges */
-.grid-cell:nth-child(15n) {
-    border-right: none;
-}
-
-.grid-cell:nth-last-child(-n+15) {
-    border-bottom: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1f2937;
+    user-select: none;
 }
 
 /* Word List */
-#word-list {
+.word-list-container {
+    min-width: 180px;
+}
+
+.word-list-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.75rem;
+}
+
+.word-list {
     list-style: none;
-    padding: 20px;
-    background: #ecf0f1;
+    background: #f8fafc;
     border-radius: 8px;
-    max-height: 300px;
-    overflow-y: auto;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
 }
 
-#word-list li {
-    padding: 8px 0;
-    border-bottom: 1px solid #bdc3c7;
-    font-size: 16px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.word-list li {
+    padding: 0.4rem 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #475569;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-#word-list li:last-child {
+.word-list li:last-child {
     border-bottom: none;
 }
 
-/* All words are equal in word search - no special spangram styling needed */
-
-/* Print Section */
-.print-section {
-    text-align: center;
-    margin-top: 30px;
+/* Answer Key */
+.answer-key {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
 }
 
-.print-section button {
-    background: #27ae60;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 0 10px;
-    transition: background 0.3s ease;
+.answer-key-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.75rem;
 }
 
-.print-section button:hover {
-    background: #219a52;
+.answer-key-content {
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    border-radius: 8px;
+    padding: 1rem;
+    font-size: 0.8rem;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    color: #92400e;
 }
 
-.print-section button:first-child {
-    background: #f39c12;
-}
-
-.print-section button:first-child:hover {
-    background: #d68910;
-}
-
-/* Error Section */
-.error-section {
-    background: #e74c3c;
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.error-message {
-    font-size: 16px;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    margin-top: 40px;
-    padding: 20px;
-    color: #666;
-    font-style: italic;
-}
-
-/* Print Styles - Ultra aggressive to fix Tony's issues */
+/* Print Styles */
 @media print {
-    /* Hide EVERYTHING first */
-    * {
-        visibility: hidden !important;
-    }
-    
-    /* Only show the puzzle elements */
-    .output-section,
-    .output-section *,
-    .puzzle-info,
-    .puzzle-info *,
-    .puzzle-container,
-    .puzzle-container *,
-    .grid-container,
-    .grid-container *,
-    .words-container,
-    .words-container *,
-    .grid,
-    .grid *,
-    #word-list,
-    #word-list * {
-        visibility: visible !important;
-    }
-    
-    /* Reset everything for print */
-    html, body {
-        width: 100% !important;
-        height: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
+    body {
         background: white !important;
-        color: black !important;
-        font-family: Arial, sans-serif !important;
-        overflow: visible !important;
+        font-size: 12px;
     }
     
-    .container {
-        width: 100% !important;
-        max-width: none !important;
-        margin: 0 !important;
-        padding: 10px !important;
+    .header,
+    .controls-panel {
+        display: none !important;
     }
     
-    .output-section {
-        position: relative !important;
-        width: 100% !important;
-        height: auto !important;
-        background: white !important;
-        box-shadow: none !important;
-        border: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        page-break-inside: avoid !important;
-    }
-    
-    /* Puzzle header */
-    .puzzle-info {
-        text-align: center !important;
-        margin: 0 0 15px 0 !important;
-        background: white !important;
-        padding: 5px 0 !important;
-        border-bottom: 2px solid #000 !important;
-    }
-    
-    .puzzle-info p {
-        margin: 3px 0 !important;
-        font-size: 12px !important;
-        font-weight: bold !important;
-        color: black !important;
-    }
-    
-    /* Main puzzle layout - vertical stack to fit one page */
-    .puzzle-container {
+    .main-content {
         display: block !important;
-        width: 100% !important;
-        page-break-inside: avoid !important;
-    }
-    
-    /* Grid on top */
-    .grid-container {
-        width: 100% !important;
-        margin-bottom: 10px !important;
-        text-align: center !important;
-    }
-    
-    .grid-container h3 {
-        text-align: center !important;
-        margin: 0 0 5px 0 !important;
-        font-size: 12px !important;
-        color: black !important;
-        font-weight: bold !important;
-    }
-    
-    .grid {
-        display: grid !important;
-        background: white !important;
-        border: 1px solid #666 !important;
         padding: 0 !important;
+        margin: 0 !important;
+        max-width: none !important;
+    }
+    
+    .preview-panel {
+        box-shadow: none !important;
         border-radius: 0 !important;
-        margin: 0 auto !important;
-        width: 450px !important;
-        max-width: 450px !important;
-        gap: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .puzzle-content {
+        flex-direction: column !important;
+        gap: 1rem !important;
+    }
+    
+    .puzzle-grid {
+        margin: 0 auto;
     }
     
     .grid-cell {
-        border: 1px solid #ccc !important;
-        background: white !important;
-        color: black !important;
-        font-size: 10px !important;
-        font-weight: bold !important;
-        border-radius: 0 !important;
         width: 20px !important;
         height: 20px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        text-align: center !important;
-        line-height: 1 !important;
+        font-size: 0.8rem !important;
+        border: 1px solid #666 !important;
     }
     
-    /* Word list below grid */
-    .words-container {
-        width: 100% !important;
-        margin-top: 10px !important;
-    }
-    
-    .words-container h3 {
-        text-align: center !important;
-        margin: 0 0 5px 0 !important;
-        font-size: 12px !important;
-        color: black !important;
-        font-weight: bold !important;
-    }
-    
-    /* Fix the scrollable word list - make it a simple grid */
-    #word-list {
-        background: white !important;
-        border: 1px solid black !important;
-        border-radius: 0 !important;
-        padding: 8px !important;
-        max-height: none !important;
-        height: auto !important;
-        overflow: visible !important;
-        overflow-y: visible !important;
-        list-style: none !important;
-        width: 100% !important;
-        display: grid !important;
-        grid-template-columns: repeat(5, 1fr) !important;
-        gap: 2px !important;
-        margin: 0 auto !important;
-        max-width: 450px !important;
-    }
-    
-    #word-list li {
-        font-size: 8px !important;
-        padding: 3px 2px !important;
-        border: none !important;
-        color: black !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.5px !important;
-        margin: 0 !important;
-        display: block !important;
-        text-align: left !important;
-        break-inside: avoid !important;
-        background: white !important;
-        border-bottom: 1px dotted #ccc !important;
-    }
-    
-    /* Page setup */
     @page {
-        margin: 0.4in !important;
-        size: letter !important;
-    }
-    
-    /* Force single page */
-    body {
-        page-break-after: avoid !important;
+        margin: 0.5in;
     }
 }
 
-/* Responsive */
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .main-content {
+        grid-template-columns: 320px 1fr;
+        gap: 1.5rem;
+        padding: 1rem;
+    }
+}
+
 @media (max-width: 768px) {
-    .puzzle-container {
-        flex-direction: column;
+    .main-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
     }
     
-    .grid {
+    .controls-panel {
+        position: static;
+    }
+    
+    .puzzle-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .word-list-container {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-content {
+        padding: 0 1rem;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+    }
+    
+    .puzzle-grid {
         max-width: 100%;
-        font-size: 14px;
+        overflow-x: auto;
     }
     
     .grid-cell {
-        font-size: 14px;
+        width: 20px;
+        height: 20px;
+        font-size: 0.7rem;
     }
 }

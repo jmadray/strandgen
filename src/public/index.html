@@ -3,63 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strandgen - Bathroom Strands Generator 🚽</title>
+    <title>Strandgen - Professional Word Search Generator</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🚽 Bathroom Word Search</h1>
-            <p>Generate printable word search puzzles for bathroom entertainment!</p>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <i class="fas fa-toilet"></i>
+                    Strandgen
+                </h1>
+                <p class="tagline">Professional Word Search Generator</p>
+            </div>
         </header>
 
-        <main>
-            <div class="input-section">
-                <h2>Enter Your Words</h2>
-                <textarea 
-                    id="wordInput" 
-                    placeholder="Enter your themed words (one per line)&#10;Example:&#10;TOILET&#10;PAPER&#10;FLUSH&#10;PLUNGER&#10;BATHROOM&#10;SINK"
-                    rows="10"
-                    cols="50"
-                ></textarea>
-                <br>
-                <button id="generateBtn" onclick="generatePuzzle()">Generate Puzzle</button>
-            </div>
-
-            <div id="output-section" class="output-section" style="display: none;">
-                <h2>Your Word Search Puzzle</h2>
-                
-                <div class="puzzle-info">
-                    <p><strong>Theme:</strong> <span id="theme">Your Custom Theme</span></p>
-                    <p><strong>Words Hidden:</strong> <span id="word-count"></span> words in 8 directions</p>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Panel - Controls -->
+            <div class="controls-panel">
+                <div class="control-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-list"></i>
+                        Words
+                    </h2>
+                    <textarea 
+                        id="wordInput" 
+                        placeholder="Enter your words (one per line)&#10;&#10;Example:&#10;TOILET&#10;PAPER&#10;FLUSH&#10;PLUNGER&#10;BATHROOM"
+                        rows="8"
+                        class="word-input"
+                    ></textarea>
+                    <div class="word-count">
+                        <span id="wordCount">0 words</span>
+                    </div>
                 </div>
 
-                <div class="puzzle-container">
-                    <div class="grid-container">
-                        <h3>Puzzle Grid</h3>
-                        <div id="puzzle-grid" class="grid"></div>
+                <div class="control-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </h3>
+                    
+                    <div class="setting-group">
+                        <label class="setting-label">Difficulty Level</label>
+                        <select id="difficultySelect" class="setting-select">
+                            <option value="1">Easy (4 directions)</option>
+                            <option value="2">Medium (6 directions)</option>
+                            <option value="3" selected>Hard (8 directions)</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-group">
+                        <label class="setting-label">Grid Size</label>
+                        <select id="gridSizeSelect" class="setting-select">
+                            <option value="auto" selected>Auto (recommended)</option>
+                            <option value="15">15×15</option>
+                            <option value="20">20×20</option>
+                            <option value="25">25×25</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-magic"></i>
+                        Generate
+                    </h3>
+                    
+                    <button id="generateBtn" class="btn btn-primary btn-large">
+                        <i class="fas fa-play"></i>
+                        Create Puzzle
+                    </button>
+                    
+                    <button id="exampleBtn" class="btn btn-secondary btn-small">
+                        <i class="fas fa-lightbulb"></i>
+                        Load Example
+                    </button>
+                </div>
+
+                <!-- Results Actions (hidden until puzzle generated) -->
+                <div id="actionsPanel" class="control-section" style="display: none;">
+                    <h3 class="section-title">
+                        <i class="fas fa-download"></i>
+                        Export
+                    </h3>
+                    
+                    <button id="downloadPdfBtn" class="btn btn-success btn-medium">
+                        <i class="fas fa-file-pdf"></i>
+                        Download PDF
+                    </button>
+                    
+                    <button id="printBtn" class="btn btn-outline btn-medium">
+                        <i class="fas fa-print"></i>
+                        Print
+                    </button>
+                    
+                    <div class="setting-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="showAnswerKey">
+                            <span class="checkmark"></span>
+                            Show Answer Key
+                        </label>
                     </div>
                     
-                    <div class="words-container">
-                        <h3>Words to Find</h3>
-                        <ul id="word-list"></ul>
+                    <button id="regenerateBtn" class="btn btn-outline btn-medium">
+                        <i class="fas fa-redo"></i>
+                        Regenerate
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Panel - Preview -->
+            <div class="preview-panel">
+                <!-- Loading State -->
+                <div id="loadingState" class="loading-state" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Generating your puzzle...</p>
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-th"></i>
+                    </div>
+                    <h3>Ready to Create</h3>
+                    <p>Enter your words on the left and click "Create Puzzle" to generate a professional word search.</p>
+                </div>
+
+                <!-- Puzzle Preview -->
+                <div id="puzzlePreview" class="puzzle-preview" style="display: none;">
+                    <div class="puzzle-header">
+                        <div class="puzzle-info">
+                            <h3 id="puzzleTitle">Word Search Puzzle</h3>
+                            <div class="puzzle-meta">
+                                <span id="puzzleStats">15×15 • 8 words • Hard difficulty</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="puzzle-content">
+                        <div class="puzzle-grid-container">
+                            <div id="puzzleGrid" class="puzzle-grid"></div>
+                        </div>
+                        
+                        <div class="word-list-container">
+                            <h4 class="word-list-title">Find These Words:</h4>
+                            <ul id="wordList" class="word-list"></ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Answer Key (hidden by default) -->
+                    <div id="answerKey" class="answer-key" style="display: none;">
+                        <h4 class="answer-key-title">Answer Key:</h4>
+                        <div id="answerKeyContent" class="answer-key-content"></div>
                     </div>
                 </div>
 
-                <div class="print-section">
-                    <button onclick="window.print()">🖨️ Print Puzzle</button>
-                    <button onclick="generateAnother()">Generate Another</button>
+                <!-- Error State -->
+                <div id="errorState" class="error-state" style="display: none;">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Oops! Something went wrong</h3>
+                    <p id="errorMessage">Please try again or check your word list.</p>
+                    <button id="retryBtn" class="btn btn-primary">
+                        <i class="fas fa-redo"></i>
+                        Try Again
+                    </button>
                 </div>
             </div>
-
-            <div id="error-section" class="error-section" style="display: none;">
-                <div class="error-message" id="error-message"></div>
-            </div>
         </main>
-
-        <footer>
-            <p>Built by Ratchet 🔧 for bathroom entertainment since 2026</p>
-        </footer>
     </div>
 
     <script src="script.js"></script>
