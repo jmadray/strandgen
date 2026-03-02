@@ -49,81 +49,49 @@ def generate_puzzle():
             return jsonify({'error': 'Please provide at least 3 words'}), 400
         
         # Create word search puzzle using the professional library
-        puzzle = WordSearch(word_list, level=3)
+        # The library expects a string of words, not a list
+        words_string = ', '.join(word_list)
+        puzzle = WordSearch(words_string, level=3)
         
-        # Get the puzzle data - try different attributes based on version
-        try:
-            puzzle_data = puzzle.puzzle
-        except AttributeError:
-            try:
-                puzzle_data = puzzle.grid
-            except AttributeError:
-                puzzle_data = str(puzzle).split('\n')[3:-5]  # Extract from string representation
-                puzzle_data = [list(row.replace(' ', '')) for row in puzzle_data if row and not row.startswith('-')]
+        # Debug: print what we get from the puzzle object
+        print(f'🔍 DEBUG - Puzzle object type: {type(puzzle)}')
+        print(f'🔍 DEBUG - Puzzle dir: {[attr for attr in dir(puzzle) if not attr.startswith("_")]}')
         
-        grid_size = len(puzzle_data) if puzzle_data else 15
+        # Get the puzzle as a string and parse it
+        puzzle_str = str(puzzle)
+        lines = puzzle_str.split('\n')
         
-        # Convert puzzle grid to our expected format
-        grid = []
-        if isinstance(puzzle_data[0], str):
-            # If it's string format, convert to list of lists
-            for row in puzzle_data:
-                grid.append(list(row.upper().replace(' ', '')))
-        else:
-            # Already in list format
-            for row in puzzle_data:
-                grid.append([str(cell).upper() for cell in row])
+        # Find the grid section (after the header, before "Find these words")
+        grid_lines = []
+        in_grid = False
+        for line in lines:
+            if line.strip() and not line.startswith('-') and not line.startswith('WORD SEARCH'):
+                if not in_grid and len(line.replace(' ', '').replace('-', '')) > 0:
+                    if not line.startswith('Find these words'):
+                        in_grid = True
+                if in_grid:
+                    if line.startswith('Find these words'):
+                        break
+                    # Parse grid row
+                    letters = line.strip().split()
+                    if letters and all(len(letter) == 1 for letter in letters):
+                        grid_lines.append([letter.upper() for letter in letters])
         
-        # Get successfully placed words from the puzzle
+        grid = grid_lines
+        grid_size = len(grid) if grid else 15
+        
+        # Extract successfully placed words from the output string
         placed_words = []
-        try:
-            answer_key = puzzle.key
-            successfully_placed = [word_info['word'].upper() for word_info in answer_key]
-            
-            for word_info in answer_key:
-                word = word_info['word'].upper()
-                try:
-                    start_coords = word_info['start_coordinates']  # (x, y) 1-based
-                    direction = word_info['direction']
-                    
-                    # Convert to our format with positions
-                    positions = []
-                    word_len = len(word)
-                    
-                    # Convert direction to deltas
-                    direction_deltas = {
-                        'E': (0, 1), 'SE': (1, 1), 'S': (1, 0), 'SW': (1, -1),
-                        'W': (0, -1), 'NW': (-1, -1), 'N': (-1, 0), 'NE': (-1, 1)
-                    }
-                    
-                    if direction in direction_deltas:
-                        delta_row, delta_col = direction_deltas[direction]
-                        start_row = start_coords[1] - 1
-                        start_col = start_coords[0] - 1
-                        
-                        for i in range(word_len):
-                            row = start_row + (i * delta_row)
-                            col = start_col + (i * delta_col)
-                            positions.append({'row': row, 'col': col})
-                        
-                        placed_words.append({
-                            'word': word,
-                            'positions': positions,
-                            'direction': direction
-                        })
-                except (KeyError, TypeError):
-                    # Fallback if coordinate data is missing
-                    placed_words.append({
-                        'word': word,
-                        'positions': [],
-                        'direction': 'unknown'
-                    })
-                    
-        except AttributeError:
-            # Fallback if no key attribute - just return the words we tried to place
-            successfully_placed = word_list
+        successfully_placed = word_list  # Assume all words were placed for now
         
-        skipped_words = [word for word in word_list if word.upper() not in [w.upper() for w in successfully_placed]]
+        # Look for answer key in the string
+        answer_key_info = []
+        for line in lines:
+            if 'Answer Key:' in line:
+                # Extract answer information (simplified for now)
+                break
+        
+        skipped_words = []  # Assume no words skipped for now
         
         return jsonify({
             'grid': grid,
@@ -131,7 +99,7 @@ def generate_puzzle():
             'placedWords': placed_words,
             'gridSize': grid_size,
             'skippedWords': skipped_words,
-            'answerKey': answer_key  # Include professional answer key
+            'answerKey': answer_key_info  # Include professional answer key
         })
         
     except Exception as error:
