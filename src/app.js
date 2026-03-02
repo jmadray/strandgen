@@ -26,9 +26,9 @@ app.post('/generate', (req, res) => {
         return res.status(400).json({ error: 'Please provide a list of words' });
     }
     
-    // Parse words from input
+    // Parse words from input - remove spaces from multi-word entries
     const wordList = words.split('\n')
-        .map(word => word.trim())
+        .map(word => word.trim().replace(/\s+/g, '')) // Remove all spaces
         .filter(word => word.length > 0);
     
     console.log('🔍 DEBUG - Parsed word list:', JSON.stringify(wordList));
