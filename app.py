@@ -108,12 +108,26 @@ def generate_puzzle():
                     # It's already a list of answer objects
                     for answer in answer_key_raw:
                         if isinstance(answer, dict):
-                            answer_key_info.append(answer)
+                            # Convert any non-serializable objects to strings
+                            clean_answer = {}
+                            for key, value in answer.items():
+                                if hasattr(value, '__str__') and not isinstance(value, (str, int, float, list, dict, bool, type(None))):
+                                    # Convert non-JSON-serializable objects to strings
+                                    clean_answer[key] = str(value)
+                                else:
+                                    clean_answer[key] = value
+                            answer_key_info.append(clean_answer)
                         else:
                             print(f'🔍 DEBUG - Unexpected answer format: {answer}')
                 elif isinstance(answer_key_raw, dict):
-                    # It's a single answer object
-                    answer_key_info.append(answer_key_raw)
+                    # It's a single answer object - clean it up
+                    clean_answer = {}
+                    for key, value in answer_key_raw.items():
+                        if hasattr(value, '__str__') and not isinstance(value, (str, int, float, list, dict, bool, type(None))):
+                            clean_answer[key] = str(value)
+                        else:
+                            clean_answer[key] = value
+                    answer_key_info.append(clean_answer)
                 else:
                     print(f'🔍 DEBUG - Unexpected answer key format: {type(answer_key_raw)}')
             else:
