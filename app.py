@@ -185,7 +185,19 @@ def generate_puzzle():
             
         skipped_words = []  # Most words should be placed with professional library
         
-        return jsonify({
+        # Helper function to make objects JSON serializable
+        def make_serializable(obj):
+            if isinstance(obj, dict):
+                return {key: make_serializable(value) for key, value in obj.items()}
+            elif isinstance(obj, list):
+                return [make_serializable(item) for item in obj]
+            elif hasattr(obj, '__str__') and not isinstance(obj, (str, int, float, bool, type(None))):
+                # Convert non-JSON-serializable objects to strings
+                return str(obj)
+            else:
+                return obj
+        
+        response_data = {
             'grid': grid,
             'words': successfully_placed,
             'placedWords': placed_words,
@@ -193,7 +205,12 @@ def generate_puzzle():
             'skippedWords': skipped_words,
             'answerKey': answer_key_info,  # Include professional answer key
             'difficulty': difficulty_level
-        })
+        }
+        
+        # Make the entire response JSON serializable
+        clean_response = make_serializable(response_data)
+        
+        return jsonify(clean_response)
         
     except Exception as error:
         import traceback
