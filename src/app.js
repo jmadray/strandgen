@@ -54,11 +54,11 @@ function generateStrandsPuzzle(wordList) {
     // Create 6x8 grid (standard Strands size)
     const grid = Array(6).fill().map(() => Array(8).fill(''));
     
-    // Place spangram first (this is where the real algorithm magic happens)
+    // Place words in grid
     const placedWords = placeWordsInGrid(grid, [spangram, ...regularWords]);
     
-    // Fill empty spaces with random letters
-    fillEmptySpaces(grid);
+    // Fill empty spaces with random letters (but preserve placed words)
+    fillEmptySpaces(grid, placedWords);
     
     return {
         grid: grid,
@@ -73,44 +73,57 @@ function placeWordsInGrid(grid, words) {
     const rows = grid.length;
     const cols = grid[0].length;
     
-    // For MVP: Simple placement algorithm
-    // Place spangram horizontally in middle row
+    // Place spangram first (longest word)
     const spangram = words[0];
     if (spangram.length <= cols) {
         const startCol = Math.floor((cols - spangram.length) / 2);
         const row = Math.floor(rows / 2);
         
+        const positions = [];
         for (let i = 0; i < spangram.length; i++) {
             grid[row][startCol + i] = spangram[i].toUpperCase();
+            positions.push({ row, col: startCol + i });
         }
         
         placed.push({
             word: spangram,
-            positions: Array.from({ length: spangram.length }, (_, i) => ({ row, col: startCol + i }))
+            positions: positions
         });
     }
     
-    // Place other words (simplified for MVP)
-    for (let i = 1; i < words.length && i <= 4; i++) {
+    // Place other words
+    for (let i = 1; i < words.length; i++) {
         const word = words[i];
-        if (tryPlaceWord(grid, word, placed)) {
-            // Word was placed successfully
+        const placement = findWordPlacement(grid, word);
+        if (placement) {
+            // Place the word
+            placement.positions.forEach((pos, letterIndex) => {
+                grid[pos.row][pos.col] = word[letterIndex].toUpperCase();
+            });
+            
+            placed.push({
+                word: word,
+                positions: placement.positions
+            });
         }
     }
     
     return placed;
 }
 
-function tryPlaceWord(grid, word, alreadyPlaced) {
+function findWordPlacement(grid, word) {
     const rows = grid.length;
     const cols = grid[0].length;
     
-    // Try horizontal placement
+    // Try horizontal placement first
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col <= cols - word.length; col++) {
             if (canPlaceHorizontally(grid, word, row, col)) {
-                placeWordHorizontally(grid, word, row, col);
-                return true;
+                const positions = [];
+                for (let i = 0; i < word.length; i++) {
+                    positions.push({ row: row, col: col + i });
+                }
+                return { positions };
             }
         }
     }
@@ -119,13 +132,16 @@ function tryPlaceWord(grid, word, alreadyPlaced) {
     for (let row = 0; row <= rows - word.length; row++) {
         for (let col = 0; col < cols; col++) {
             if (canPlaceVertically(grid, word, row, col)) {
-                placeWordVertically(grid, word, row, col);
-                return true;
+                const positions = [];
+                for (let i = 0; i < word.length; i++) {
+                    positions.push({ row: row + i, col: col });
+                }
+                return { positions };
             }
         }
     }
     
-    return false;
+    return null; // Couldn't place word
 }
 
 function canPlaceHorizontally(grid, word, row, col) {
@@ -148,24 +164,25 @@ function canPlaceVertically(grid, word, row, col) {
     return true;
 }
 
-function placeWordHorizontally(grid, word, row, col) {
-    for (let i = 0; i < word.length; i++) {
-        grid[row][col + i] = word[i].toUpperCase();
-    }
-}
 
-function placeWordVertically(grid, word, row, col) {
-    for (let i = 0; i < word.length; i++) {
-        grid[row + i][col] = word[i].toUpperCase();
-    }
-}
 
-function fillEmptySpaces(grid) {
+function fillEmptySpaces(grid, placedWords) {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    
+    // Create a map of placed positions
+    const placedPositions = new Set();
+    placedWords.forEach(word => {
+        word.positions.forEach(pos => {
+            placedPositions.add(`${pos.row},${pos.col}`);
+        });
+    });
     
     for (let row = 0; row < grid.length; row++) {
         for (let col = 0; col < grid[row].length; col++) {
-            if (grid[row][col] === '') {
+            const posKey = `${row},${col}`;
+            
+            // Only fill if position is empty AND not already placed by a word
+            if (grid[row][col] === '' && !placedPositions.has(posKey)) {
                 grid[row][col] = letters[Math.floor(Math.random() * letters.length)];
             }
         }
