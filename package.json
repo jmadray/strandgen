@@ -1,0 +1,26 @@
+{
+  "name": "strandgen",
+  "version": "1.0.0",
+  "description": "Bathroom Strands Generator - Create printable NYT-style word puzzles",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [
+    "strands",
+    "word-puzzle",
+    "generator",
+    "bathroom-game"
+  ],
+  "author": "Ratchet",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

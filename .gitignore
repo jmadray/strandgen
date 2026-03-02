@@ -1,0 +1,14 @@
+node_modules/
+.env
+.env.local
+.env.production
+.env.development
+*.log
+.DS_Store
+config/production.json
+secrets/
+*.key
+*.pem
+.cache/
+dist/
+build/

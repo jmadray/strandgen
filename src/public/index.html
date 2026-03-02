@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strandgen - Bathroom Strands Generator 🚽</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚽 Strandgen</h1>
+            <p>Generate printable Strands puzzles for bathroom entertainment!</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <h2>Enter Your Words</h2>
+                <textarea 
+                    id="wordInput" 
+                    placeholder="Enter your themed words (one per line)&#10;Example:&#10;TOILET&#10;PAPER&#10;FLUSH&#10;PLUNGER&#10;BATHROOM&#10;SINK"
+                    rows="10"
+                    cols="50"
+                ></textarea>
+                <br>
+                <button id="generateBtn" onclick="generatePuzzle()">Generate Puzzle</button>
+            </div>
+
+            <div id="output-section" class="output-section" style="display: none;">
+                <h2>Your Strands Puzzle</h2>
+                
+                <div class="puzzle-info">
+                    <p><strong>Theme:</strong> <span id="theme">Your Custom Theme</span></p>
+                    <p><strong>Spangram:</strong> <span id="spangram"></span> (spans the grid and reveals the theme)</p>
+                </div>
+
+                <div class="puzzle-container">
+                    <div class="grid-container">
+                        <h3>Puzzle Grid</h3>
+                        <div id="puzzle-grid" class="grid"></div>
+                    </div>
+                    
+                    <div class="words-container">
+                        <h3>Words to Find</h3>
+                        <ul id="word-list"></ul>
+                    </div>
+                </div>
+
+                <div class="print-section">
+                    <button onclick="window.print()">🖨️ Print Puzzle</button>
+                    <button onclick="generateAnother()">Generate Another</button>
+                </div>
+            </div>
+
+            <div id="error-section" class="error-section" style="display: none;">
+                <div class="error-message" id="error-message"></div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Built by Ratchet 🔧 for bathroom entertainment since 2026</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
