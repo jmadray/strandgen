@@ -56,14 +56,19 @@ function displayPuzzle(puzzle) {
     const outputSection = document.getElementById('output-section');
     const puzzleGrid = document.getElementById('puzzle-grid');
     const wordList = document.getElementById('word-list');
-    const spangramElement = document.getElementById('spangram');
+    const wordCountElement = document.getElementById('word-count');
     
     // Clear previous content
     puzzleGrid.innerHTML = '';
     wordList.innerHTML = '';
     
-    // Set spangram info
-    spangramElement.textContent = puzzle.spangram.toUpperCase();
+    // Set word count
+    wordCountElement.textContent = puzzle.words.length;
+    
+    // Update grid CSS for new size
+    const gridSize = puzzle.gridSize || 15;
+    puzzleGrid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+    puzzleGrid.style.gridTemplateRows = `repeat(${gridSize}, 1fr)`;
     
     // Create grid
     puzzle.grid.forEach(row => {
@@ -79,12 +84,6 @@ function displayPuzzle(puzzle) {
     puzzle.words.forEach(word => {
         const li = document.createElement('li');
         li.textContent = word.toUpperCase();
-        
-        if (word === puzzle.spangram) {
-            li.className = 'spangram';
-            li.textContent += ' (SPANGRAM)';
-        }
-        
         wordList.appendChild(li);
     });
     
@@ -160,7 +159,9 @@ function loadExampleWords() {
         'TOWEL',
         'SOAP',
         'MIRROR',
-        'FAUCET'
+        'FAUCET',
+        'SHOWER',
+        'BATHTUB'
     ];
     
     document.getElementById('wordInput').value = exampleWords.join('\n');

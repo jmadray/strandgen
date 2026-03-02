@@ -48,150 +48,131 @@ app.post('/generate', (req, res) => {
     }
 });
 
-// Strands puzzle generation algorithm
+// Word search puzzle generation algorithm
 function generateStrandsPuzzle(wordList) {
-    // Find the spangram (longest word)
-    const spangram = wordList.reduce((longest, word) => 
-        word.length > longest.length ? word : longest
-    );
+    // Sort words by length (longest first for better placement)
+    const sortedWords = [...wordList].sort((a, b) => b.length - a.length);
     
-    // Remove spangram from regular words
-    const regularWords = wordList.filter(word => word !== spangram);
+    // Create 15x15 grid (better for word search)
+    const gridSize = 15;
+    const grid = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
     
-    // Create 6x8 grid (standard Strands size)
-    const grid = Array(6).fill().map(() => Array(8).fill(''));
+    // Place all words in the grid
+    const placedWords = placeWordsInGrid(grid, sortedWords, gridSize);
     
-    // Place words in grid
-    const placedWords = placeWordsInGrid(grid, [spangram, ...regularWords]);
-    
-    // Fill empty spaces with random letters (but preserve placed words)
-    fillEmptySpaces(grid, placedWords);
+    // Fill empty spaces with random letters
+    fillEmptySpaces(grid);
     
     return {
         grid: grid,
         words: wordList,
-        spangram: spangram,
-        placedWords: placedWords
+        placedWords: placedWords,
+        gridSize: gridSize
     };
 }
 
-function placeWordsInGrid(grid, words) {
+function placeWordsInGrid(grid, words, gridSize) {
     const placed = [];
-    const rows = grid.length;
-    const cols = grid[0].length;
     
-    // Place spangram first (longest word)
-    const spangram = words[0];
-    if (spangram.length <= cols) {
-        const startCol = Math.floor((cols - spangram.length) / 2);
-        const row = Math.floor(rows / 2);
+    // Define 8 directions for word search
+    const directions = [
+        [0, 1],   // Horizontal right
+        [0, -1],  // Horizontal left  
+        [1, 0],   // Vertical down
+        [-1, 0],  // Vertical up
+        [1, 1],   // Diagonal down-right
+        [1, -1],  // Diagonal down-left
+        [-1, 1],  // Diagonal up-right
+        [-1, -1]  // Diagonal up-left
+    ];
+    
+    // Try to place each word
+    for (const word of words) {
+        const wordUpper = word.toUpperCase();
+        let wordPlaced = false;
+        let attempts = 0;
+        const maxAttempts = 100; // Prevent infinite loops
         
-        const positions = [];
-        for (let i = 0; i < spangram.length; i++) {
-            grid[row][startCol + i] = spangram[i].toUpperCase();
-            positions.push({ row, col: startCol + i });
+        while (!wordPlaced && attempts < maxAttempts) {
+            attempts++;
+            
+            // Random starting position
+            const startRow = Math.floor(Math.random() * gridSize);
+            const startCol = Math.floor(Math.random() * gridSize);
+            
+            // Random direction
+            const direction = directions[Math.floor(Math.random() * directions.length)];
+            const [deltaRow, deltaCol] = direction;
+            
+            // Check if word fits in this direction from this position
+            if (canPlaceWord(grid, wordUpper, startRow, startCol, deltaRow, deltaCol, gridSize)) {
+                // Place the word
+                const positions = placeWord(grid, wordUpper, startRow, startCol, deltaRow, deltaCol);
+                placed.push({
+                    word: word,
+                    positions: positions,
+                    direction: direction
+                });
+                wordPlaced = true;
+            }
         }
         
-        placed.push({
-            word: spangram,
-            positions: positions
-        });
-    }
-    
-    // Place other words
-    for (let i = 1; i < words.length; i++) {
-        const word = words[i];
-        const placement = findWordPlacement(grid, word);
-        if (placement) {
-            // Place the word
-            placement.positions.forEach((pos, letterIndex) => {
-                grid[pos.row][pos.col] = word[letterIndex].toUpperCase();
-            });
-            
-            placed.push({
-                word: word,
-                positions: placement.positions
-            });
+        if (!wordPlaced) {
+            console.log(`⚠️  Could not place word: ${word}`);
         }
     }
     
     return placed;
 }
 
-function findWordPlacement(grid, word) {
-    const rows = grid.length;
-    const cols = grid[0].length;
+function canPlaceWord(grid, word, startRow, startCol, deltaRow, deltaCol, gridSize) {
+    // Check if word fits within grid bounds
+    const endRow = startRow + (word.length - 1) * deltaRow;
+    const endCol = startCol + (word.length - 1) * deltaCol;
     
-    // Try horizontal placement first
-    for (let row = 0; row < rows; row++) {
-        for (let col = 0; col <= cols - word.length; col++) {
-            if (canPlaceHorizontally(grid, word, row, col)) {
-                const positions = [];
-                for (let i = 0; i < word.length; i++) {
-                    positions.push({ row: row, col: col + i });
-                }
-                return { positions };
-            }
-        }
+    if (endRow < 0 || endRow >= gridSize || endCol < 0 || endCol >= gridSize) {
+        return false;
     }
     
-    // Try vertical placement
-    for (let row = 0; row <= rows - word.length; row++) {
-        for (let col = 0; col < cols; col++) {
-            if (canPlaceVertically(grid, word, row, col)) {
-                const positions = [];
-                for (let i = 0; i < word.length; i++) {
-                    positions.push({ row: row + i, col: col });
-                }
-                return { positions };
-            }
-        }
-    }
-    
-    return null; // Couldn't place word
-}
-
-function canPlaceHorizontally(grid, word, row, col) {
+    // Check if word can be placed (empty cells or matching letters)
     for (let i = 0; i < word.length; i++) {
-        const currentCell = grid[row][col + i];
-        // Allow placement in empty cells only for now (simpler algorithm)
-        if (currentCell !== '') {
+        const currentRow = startRow + i * deltaRow;
+        const currentCol = startCol + i * deltaCol;
+        const currentCell = grid[currentRow][currentCol];
+        const wordLetter = word[i];
+        
+        // Cell must be empty OR contain the same letter (for overlapping words)
+        if (currentCell !== '' && currentCell !== wordLetter) {
             return false;
         }
     }
+    
     return true;
 }
 
-function canPlaceVertically(grid, word, row, col) {
+function placeWord(grid, word, startRow, startCol, deltaRow, deltaCol) {
+    const positions = [];
+    
     for (let i = 0; i < word.length; i++) {
-        const currentCell = grid[row + i][col];
-        // Allow placement in empty cells only for now (simpler algorithm)
-        if (currentCell !== '') {
-            return false;
-        }
+        const currentRow = startRow + i * deltaRow;
+        const currentCol = startCol + i * deltaCol;
+        
+        grid[currentRow][currentCol] = word[i];
+        positions.push({ row: currentRow, col: currentCol });
     }
-    return true;
+    
+    return positions;
 }
 
 
 
-function fillEmptySpaces(grid, placedWords) {
+function fillEmptySpaces(grid) {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    
-    // Create a map of placed positions
-    const placedPositions = new Set();
-    placedWords.forEach(word => {
-        word.positions.forEach(pos => {
-            placedPositions.add(`${pos.row},${pos.col}`);
-        });
-    });
     
     for (let row = 0; row < grid.length; row++) {
         for (let col = 0; col < grid[row].length; col++) {
-            const posKey = `${row},${col}`;
-            
-            // Only fill if position is empty AND not already placed by a word
-            if (grid[row][col] === '' && !placedPositions.has(posKey)) {
+            // Fill only empty cells
+            if (grid[row][col] === '') {
                 grid[row][col] = letters[Math.floor(Math.random() * letters.length)];
             }
         }

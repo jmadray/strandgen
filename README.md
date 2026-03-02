@@ -1,21 +1,22 @@
-# Strandgen - Bathroom Strands Generator 🚽
+# Strandgen - Bathroom Word Search Generator 🚽
 
-A web application that generates printable New York Times-style Strands word puzzles. Perfect for bathroom reading when you forget your phone!
+A web application that generates printable word search puzzles. Perfect for bathroom reading when you forget your phone!
 
 ## Features
 
 - **Input**: Paste a list of themed words
-- **Grid**: Standard 6x8 Strands format  
-- **Spangram**: Automatically selects longest word as the spangram
+- **Grid**: 15x15 word search format  
+- **8 Directions**: Words hidden horizontally, vertically, and diagonally
+- **Overlapping**: Words can share letters for more challenging puzzles
 - **Output**: Printable puzzle with word list for hints
 - **Theme**: Perfect for bathroom-themed words (or any theme!)
 
 ## How It Works
 
 1. Enter your themed words (one per line)
-2. Generator creates a 6x8 grid with words hidden inside
-3. Longest word becomes the spangram (spans the grid)
-4. Print and enjoy your custom puzzle!
+2. Generator creates a 15x15 grid with words hidden in 8 directions
+3. Words can overlap and share letters
+4. Print and enjoy your custom word search!
 
 ## Development
 
