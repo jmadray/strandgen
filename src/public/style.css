@@ -233,42 +233,137 @@ footer {
 
 /* Print Styles */
 @media print {
-    body {
-        background: white;
-        color: black;
+    * {
+        margin: 0;
+        padding: 0;
     }
     
-    .input-section, .print-section, footer {
+    body {
+        background: white !important;
+        color: black !important;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        line-height: 1.2;
+    }
+    
+    /* Hide everything except the puzzle */
+    header, .input-section, .print-section, footer, .error-section {
         display: none !important;
     }
     
     .container {
-        max-width: none;
-        margin: 0;
-        padding: 20px;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 15px !important;
     }
     
     .output-section {
-        box-shadow: none;
-        border: 1px solid #333;
+        display: block !important;
+        background: white !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
     
-    .grid {
-        background: white;
-        border: 2px solid #333;
+    .puzzle-info {
+        text-align: center;
+        margin-bottom: 15px;
+        background: none !important;
+        padding: 10px 0 !important;
+        border-bottom: 2px solid #000;
     }
     
-    .grid-cell {
-        border: 1px solid #333;
-        background: white;
+    .puzzle-info p {
+        margin: 5px 0;
+        font-size: 14px;
+        font-weight: bold;
     }
     
     .puzzle-container {
-        flex-direction: column;
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between;
+        gap: 20px;
+        page-break-inside: avoid;
+    }
+    
+    .grid-container {
+        flex: 0 0 60%;
+    }
+    
+    .grid-container h3 {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: #000;
+    }
+    
+    .grid {
+        background: white !important;
+        border: 2px solid #000 !important;
+        padding: 5px !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .grid-cell {
+        border: 1px solid #000 !important;
+        background: white !important;
+        color: #000 !important;
+        font-size: 10px !important;
+        font-weight: bold !important;
+        border-radius: 0 !important;
+        min-height: 18px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
     
     .words-container {
+        flex: 0 0 35%;
         page-break-inside: avoid;
+    }
+    
+    .words-container h3 {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: #000;
+    }
+    
+    #word-list {
+        background: white !important;
+        border: 2px solid #000 !important;
+        border-radius: 0 !important;
+        padding: 10px !important;
+        max-height: none !important;
+        overflow: visible !important;
+        list-style: none !important;
+        column-count: 2;
+        column-gap: 15px;
+    }
+    
+    #word-list li {
+        font-size: 10px !important;
+        padding: 3px 0 !important;
+        border-bottom: none !important;
+        color: #000 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        break-inside: avoid;
+        margin-bottom: 5px;
+    }
+    
+    /* Ensure it fits on one page */
+    @page {
+        margin: 0.5in;
+        size: letter;
+    }
+    
+    /* Force page breaks where needed */
+    .output-section {
+        page-break-before: always;
     }
 }
 
