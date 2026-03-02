@@ -339,8 +339,8 @@ footer {
     .grid {
         display: grid !important;
         background: white !important;
-        border: 2px solid black !important;
-        padding: 5px !important;
+        border: 1px solid #666 !important;
+        padding: 0 !important;
         border-radius: 0 !important;
         margin: 0 auto !important;
         width: 450px !important;
@@ -349,7 +349,7 @@ footer {
     }
     
     .grid-cell {
-        border: none !important;
+        border: 1px solid #ccc !important;
         background: white !important;
         color: black !important;
         font-size: 10px !important;
@@ -362,17 +362,6 @@ footer {
         justify-content: center !important;
         text-align: center !important;
         line-height: 1 !important;
-        border-right: 1px solid #ddd !important;
-        border-bottom: 1px solid #ddd !important;
-    }
-    
-    /* Clean up grid borders */
-    .grid-cell:nth-child(15n) {
-        border-right: none !important;
-    }
-    
-    .grid-cell:nth-last-child(-n+15) {
-        border-bottom: none !important;
     }
     
     /* Word list below grid */
