@@ -53,8 +53,9 @@ function generateStrandsPuzzle(wordList) {
     // Sort words by length (longest first for better placement)
     const sortedWords = [...wordList].sort((a, b) => b.length - a.length);
     
-    // Create 15x15 grid (better for word search)
-    const gridSize = 15;
+    // Create larger grid to accommodate long words
+    const maxWordLength = Math.max(...sortedWords.map(w => w.length));
+    const gridSize = Math.max(15, Math.min(20, maxWordLength + 2)); // Between 15-20 based on longest word
     const grid = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
     
     // Place all words in the grid
@@ -63,11 +64,15 @@ function generateStrandsPuzzle(wordList) {
     // Fill empty spaces with random letters
     fillEmptySpaces(grid);
     
+    // Only return words that were actually placed
+    const successfullyPlacedWords = placedWords.map(p => p.word);
+    
     return {
         grid: grid,
-        words: wordList,
+        words: successfullyPlacedWords,
         placedWords: placedWords,
-        gridSize: gridSize
+        gridSize: gridSize,
+        skippedWords: sortedWords.filter(word => !successfullyPlacedWords.includes(word))
     };
 }
 
@@ -118,7 +123,7 @@ function placeWordsInGrid(grid, words, gridSize) {
         }
         
         if (!wordPlaced) {
-            console.log(`⚠️  Could not place word: ${word}`);
+            console.log(`⚠️  Could not place word: ${word} (${word.length} letters)`);
         }
     }
     
